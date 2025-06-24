@@ -46,6 +46,7 @@ const corsOptions = {
       // 本地IP访问（用于移动设备测试）
       'http://192.168.31.255:3000', // 根据你的实际IP调整
       'http://192.168.31.255:3001',
+      'http://192.168.31.199:3001',
       // 线上域名（如果有的话）
       'https://your-frontend-domain.com',
       'https://your-production-domain.com'
