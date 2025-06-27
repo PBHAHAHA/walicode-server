@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const { User } = require('../models/index');
+const { authenticateToken } = require('../middleware/auth');
 
 /**
  * 获取所有用户列表
@@ -12,6 +13,7 @@ router.get('/', async (req, res) => {
     const users = await User.findAll({
       attributes: { exclude: ['password'] } // 排除密码字段
     });
+    
     
     // 返回成功响应
     res.json({
@@ -33,9 +35,10 @@ router.get('/', async (req, res) => {
  * 根据ID获取单个用户信息
  * GET /users/:id
  */
-router.get('/:id', async (req, res) => {
+router.get('/:id', authenticateToken, async (req, res) => {
   try {
     // 根据主键查找用户，排除密码字段
+    console.log(req.params.id)
     const user = await User.findByPk(req.params.id, {
       attributes: { exclude: ['password'] }
     });
@@ -68,10 +71,10 @@ router.get('/:id', async (req, res) => {
  * 创建新用户
  * POST /users
  */
-router.post('/', async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     // 从请求体中解构用户数据
-    const { username, password, email, nickname, avatar } = req.body;
+    const { username, password, email, nickname } = req.body;
     
     // 验证必填字段
     if (!username || !password || !email) {
@@ -104,12 +107,11 @@ router.post('/', async (req, res) => {
       username,
       password,
       email,
-      nickname,
-      avatar
+      nickname
     });
     
     // 返回创建成功响应，使用安全的JSON格式（不包含密码）
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       data: user.toSafeJSON(),
       message: '用户创建成功'
@@ -256,11 +258,16 @@ router.post('/login', async (req, res) => {
         message: '用户名或密码错误'
       });
     }
+
+    const token = user.generateToken();
     
     // 登录成功，返回用户信息（不包含密码）
     res.json({
       success: true,
-      data: user.toSafeJSON(),
+      data: {
+        user: user.toSafeJSON(),
+        token: token
+      },
       message: '登录成功'
     });
   } catch (error) {

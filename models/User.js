@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
@@ -74,11 +75,27 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
+  console.log(User)
+
   // 实例方法：验证密码
   User.prototype.validatePassword = async function(password) {
     return await bcrypt.compare(password, this.password);
   };
-
+  // 实例方法：生成 JWT Token
+  User.prototype.generateToken = function() {
+    console.log(this.username, "xxx")
+    return jwt.sign(
+      { 
+        id: this.id, 
+        username: this.username,
+        email: this.email
+      },
+      process.env.JWT_SECRET,
+      { 
+        expiresIn: process.env.JWT_EXPIRES_IN || '7d'
+      }
+    );
+  };
   // 实例方法：转换为安全的 JSON 格式（不包含密码）
   User.prototype.toSafeJSON = function() {
     const values = this.toJSON();

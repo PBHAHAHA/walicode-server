@@ -9,6 +9,8 @@ const cors = require('cors');
 
 const indexRouter = require('./routes/index.js');
 const usersRouter = require('./routes/users.js');
+const categoriesRouter = require('./routes/categories.js');
+const tagsRouter = require('./routes/tags.js');
 var app = express();
 
 app.use(cors()); // 允许所有域名访问
@@ -17,8 +19,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+
+app.use('/api', indexRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/categories', categoriesRouter);
+app.use('/api/tags', tagsRouter);
 // app.use(express.static(path.join(__dirname, 'public')));
 
 // 注释掉这里的端口设置，使用bin/www来启动服务器
