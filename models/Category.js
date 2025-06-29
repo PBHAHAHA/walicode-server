@@ -1,5 +1,3 @@
-
-
 module.exports = (sequelize, DataTypes) => {
   const Category = sequelize.define('Category', {
     id: {
@@ -33,16 +31,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   })
 
-  // // 定义模型关联关系
-  // Category.associate = (models) => {
-  //   // 一个分类可以有多篇文章（一对多关系）
-  //   // foreignKey: 'category_id' - 在Article表中的外键字段名
-  //   // as: 'articles' - 关联的别名，用于查询时引用
-  //   Category.hasMany(models.Article, {
-  //     foreignKey: 'category_id',
-  //     as: 'articles'
-  //   })
-  // }
+  // 定义模型关联关系
+  Category.associate = (models) => {
+    // 一个分类可以有多篇文章（一对多关系）
+    // foreignKey: 'category_id' - 在Article表中的外键字段名
+    // as: 'articles' - 关联的别名，用于查询时引用
+    Category.hasMany(models.Article, {
+      foreignKey: 'category_id',
+      as: 'articles'
+    })
+  }
 
   return Category;
 }

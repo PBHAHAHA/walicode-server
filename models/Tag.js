@@ -19,16 +19,14 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: 'updated_at',
   })
 
-  
-
-  // Tag.associate = (models) => {
-  //   Tag.belongsToMany(models.Article, {
-  //     through: 'ArticleTag',
-  //     foreignKey: 'tag_id',
-  //     otherKey: 'article_id',
-  //     as: 'articles'
-  //   })
-  // }
+  Tag.associate = (models) => {
+    Tag.belongsToMany(models.Article, {
+      through: 'ArticleTag',
+      foreignKey: 'tag_id',
+      otherKey: 'article_id',
+      as: 'articles'
+    })
+  }
 
   return Tag;
 }

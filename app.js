@@ -10,6 +10,7 @@ const cors = require('cors');
 const indexRouter = require('./routes/index.js');
 const usersRouter = require('./routes/users.js');
 const categoriesRouter = require('./routes/categories.js');
+const articlesRouter = require('./routes/articles.js');
 const tagsRouter = require('./routes/tags.js');
 var app = express();
 
@@ -23,7 +24,8 @@ app.use(cookieParser());
 app.use('/api', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/categories', categoriesRouter);
-app.use('/api/tags', tagsRouter);
+app.use('/api/tags', tagsRouter);   
+app.use('/api/articles', articlesRouter);
 // app.use(express.static(path.join(__dirname, 'public')));
 
 // 注释掉这里的端口设置，使用bin/www来启动服务器

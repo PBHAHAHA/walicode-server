@@ -1,3 +1,4 @@
+
 module.exports = (sequelize, DataTypes) => {    
   const Article = sequelize.define('Article', {
     id: {
@@ -25,12 +26,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       comment: '分类ID'
-    },
-    tag_ids: {
-      type: DataTypes.JSON,
-      defaultValue: [],
-      allowNull: true,
-      comment: '标签ID列表'
     },
     is_published: {
       type: DataTypes.BOOLEAN,
@@ -80,4 +75,6 @@ module.exports = (sequelize, DataTypes) => {
       as: 'tags'
     })
   }
+
+  return Article;
 } 
