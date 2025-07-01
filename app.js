@@ -6,6 +6,10 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const cors = require('cors');
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN,
+  credentials: true,
+};
 
 const indexRouter = require('./routes/index.js');
 const usersRouter = require('./routes/users.js');
@@ -14,7 +18,7 @@ const articlesRouter = require('./routes/articles.js');
 const tagsRouter = require('./routes/tags.js');
 var app = express();
 
-app.use(cors()); // 允许所有域名访问
+app.use(cors(corsOptions)); // 允许所有域名访问
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -21,7 +21,8 @@ router.post('/create', async (req, res) => {
     });
 
     // 如果有标签ID，建立关联关系
-    if (tag_ids && tag_ids.length > 0) {
+    // tag_ids 应该是数组格式，例如: [1, 2, 3] 或 ["1", "2", "3"]
+    if (tag_ids && Array.isArray(tag_ids) && tag_ids.length > 0) {
       const tags = await Tag.findAll({
         where: {
           id: {
