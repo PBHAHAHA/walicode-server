@@ -4,16 +4,54 @@ const { Article, Tag, Category } = require('../models/index');
 const { Op } = require('sequelize');
 const pagination = require('../middleware/pagination');
 
+// 验证和处理文章内容
+const validateAndProcessContent = (content) => {
+  if (!content) {
+    throw new Error('文章内容不能为空');
+  }
+
+  // 如果传入的是字符串，转换为基本的JSON格式
+  if (typeof content === 'string') {
+    return {
+      type: 'doc',
+      content: [
+        {
+          type: 'paragraph',
+          content: [
+            {
+              type: 'text',
+              text: content
+            }
+          ]
+        }
+      ]
+    };
+  }
+
+  // 如果传入的是JSON对象，验证基本结构
+  if (typeof content === 'object') {
+    if (!content.type || !content.content) {
+      throw new Error('JSON内容格式不正确，必须包含type和content字段');
+    }
+    return content;
+  }
+
+  throw new Error('内容格式不支持');
+};
+
 // 创建文章
 router.post('/create', async (req, res) => {
   try {
     const { title, description, content, category_id, tag_ids, is_published, is_top, cover_image } = req.body;
     
+    // 验证和处理内容
+    const processedContent = validateAndProcessContent(content);
+    
     // 创建文章
     const article = await Article.create({
       title,
       description,
-      content,
+      content: processedContent,
       category_id,
       is_published: is_published || false,
       is_top: is_top || false,
@@ -202,11 +240,17 @@ router.put('/:id', async (req, res) => {
       });
     }
 
+    // 处理内容更新
+    let processedContent = article.content;
+    if (content !== undefined) {
+      processedContent = validateAndProcessContent(content);
+    }
+
     // 更新文章基本信息
     await article.update({
       title: title || article.title,
       description: description !== undefined ? description : article.description,
-      content: content || article.content,
+      content: processedContent,
       category_id: category_id || article.category_id,
       is_published: is_published !== undefined ? is_published : article.is_published,
       is_top: is_top !== undefined ? is_top : article.is_top,

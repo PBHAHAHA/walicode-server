@@ -5,7 +5,10 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "sync-db": "node scripts/sync-db.js"
+    "sync-db": "node scripts/sync-db.js",
+    "migrate": "node scripts/migrate-db.js",
+    "migrate-manual": "node scripts/migrate-db.js --manual",
+    "test-json": "node scripts/test-json-content.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

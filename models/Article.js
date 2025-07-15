@@ -18,9 +18,9 @@ module.exports = (sequelize, DataTypes) => {
       comment: '文章描述'
     },
     content: {
-      type: DataTypes.TEXT,
+      type: DataTypes.JSON,
       allowNull: false,
-      comment: '文章内容'
+      comment: '文章内容（JSON格式）'
     },
     category_id: {
       type: DataTypes.INTEGER,

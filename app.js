@@ -7,21 +7,7 @@ dotenv.config();
 
 const cors = require('cors');
 const corsOptions = {
-  origin: function (origin, callback) {
-    // 允许的域名列表
-    const allowedOrigins = [
-      process.env.CORS_ORIGIN,
-      'https://iwali.cn', 
-      'https://www.iwali.cn' 
-    ].filter(Boolean); // 过滤掉空值
-    
-    // 如果没有origin（比如移动端应用）或者origin在允许列表中
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('不被CORS策略允许'));
-    }
-  },
+  origin: true, // 允许所有域名访问
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
@@ -34,7 +20,7 @@ const articlesRouter = require('./routes/articles.js');
 const tagsRouter = require('./routes/tags.js');
 var app = express();
 
-app.use(cors(corsOptions)); // 配置CORS限制访问域名
+app.use(cors(corsOptions)); // 配置CORS允许所有域名访问
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
